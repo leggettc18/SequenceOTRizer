@@ -1,14 +1,19 @@
 #include "Resource.h"
-#include "libultraship/libultraship.h"
 
-OTRizer::Resource::Resource(const std::filesystem::path& outPath, int resType, int gameVersion, int resVersion)
-    : outPath(outPath), resType(resType), gameVersion(gameVersion), resVersion(resVersion) {
+OTRizer::Resource::Resource(std::shared_ptr<Ship::Archive> otrFile, const std::filesystem::path& outPath, int resType, int gameVersion, int resVersion)
+    : outPath(outPath), resType(resType), gameVersion(gameVersion), resVersion(resVersion), otrFile(otrFile) {
     writer = std::make_shared<Ship::BinaryWriter>();
 }
 
-OTRizer::Resource::Resource(const std::filesystem::path& outPath, int resType)
-    : outPath(outPath), resType(resType), gameVersion(0), resVersion(0) {
+OTRizer::Resource::Resource(std::shared_ptr<Ship::Archive> otrFile, const std::filesystem::path& outPath, int resType)
+    : outPath(outPath), resType(resType), gameVersion(0), resVersion(0), otrFile(otrFile) {
     writer = std::make_shared<Ship::BinaryWriter>();
+}
+
+void OTRizer::Resource::OTRize() {
+    WriteHeader();
+    WriteResourceData();
+    otrFile->AddFile(outPath.generic_string(), (uintptr_t)ToVector().data(), (uint32_t)ToVector().size());
 }
 
 void OTRizer::Resource::WriteHeader() {
