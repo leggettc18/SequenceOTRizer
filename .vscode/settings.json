@@ -5,8 +5,9 @@
         "*.cpp": "cpp",
         "filesystem": "cpp"
     },
-    "cmake.sourceDirectory": "${workspaceFolder}/ZeldaOTRizer",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.configureSettings": {
         "CMAKE_VS_PLATFORM_NAME": "x64",
+        "AUTO_USE_VCPKG": "True"
     },
 }
