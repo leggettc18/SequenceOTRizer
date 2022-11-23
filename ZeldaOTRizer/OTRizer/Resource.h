@@ -7,10 +7,10 @@ class Resource {
     public:
         Resource(const std::filesystem::path& outPath, int resType, int gameVersion = 0, int resVersion = 0);
         Resource(const std::filesystem::path& outPath, int resType);
+        std::vector<char> ToVector();
     protected:
         void WriteHeader();
         virtual void WriteResourceData() = 0;
-        std::vector<char> ToVector();
     private:
         const std::filesystem::path outPath;
         int resType;
