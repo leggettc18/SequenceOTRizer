@@ -9,7 +9,8 @@ class Resource {
         Resource(const std::filesystem::path& outPath, int resType);
     protected:
         void WriteHeader();
-        virtual void WriteMetadata() = 0;
+        virtual void WriteResourceData() = 0;
+        std::vector<char> ToVector();
     private:
         const std::filesystem::path outPath;
         int resType;

@@ -28,3 +28,7 @@ void OTRizer::Resource::WriteHeader() {
 	while (writer->GetBaseAddress() < 0x40)
 		writer->Write((uint32_t)0); // To be used at a later date!
 }
+
+std::vector<char> OTRizer::Resource::ToVector() {
+    return writer->ToVector();
+}
