@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+        "*.css": "css",
+        "*.c": "c",
+        "*.cpp": "cpp",
+        "filesystem": "cpp"
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}/ZeldaOTRizer/OTRizer",
+    "cmake.configureSettings": {
+        "CMAKE_VS_PLATFORM_NAME": "x64",
+    },
+}
