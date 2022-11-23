@@ -17,4 +17,4 @@ FetchContent_Declare(
     GIT_TAG 9e98291cecce150aa9e04bd9a0a6d229d9474292
 )
 FetchContent_MakeAvailable(libultraship)
-target_link_libraries(OTRizer PUBLIC OTRizer_compiler_flags libultraship)
+target_link_libraries(OTRizer PUBLIC libultraship OTRizer_compiler_flags)
