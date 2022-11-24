@@ -5,13 +5,13 @@
 namespace OTRizer {
 class Resource {
     public:
-        Resource(std::shared_ptr<Ship::Archive>, const std::filesystem::path& outPath, int resType, int gameVersion, int resVersion);
-        Resource(std::shared_ptr<Ship::Archive>, const std::filesystem::path& outPath, int resType);
+        Resource(std::shared_ptr<Ship::Archive>, const std::string& outPath, int resType, int gameVersion, int resVersion);
+        Resource(std::shared_ptr<Ship::Archive>, const std::string& outPath, int resType);
 
         /**
          * @brief Path of the file that will eventually be written to the OTR file.
          */
-        const std::filesystem::path outPath;
+        const std::string outPath;
         /**
          * @brief An integer representing the type of the resource.
          * 
@@ -46,7 +46,7 @@ class Resource {
        */
       std::shared_ptr<Ship::Archive> otrFile;
       std::shared_ptr<Ship::BinaryWriter> writer;
-      
+
       /**
        * @brief Writes the Header data to the Resource's BinaryWriter stream.
        *
