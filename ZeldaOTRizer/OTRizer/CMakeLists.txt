@@ -38,8 +38,8 @@ target_include_directories(OTRizer INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 include(FetchContent)
 FetchContent_Declare(
     libultraship
-    GIT_REPOSITORY https://github.com/leggettc18/libultraship
-    GIT_TAG e9278bfc92210a0b64e2898d93484e6182443ebb
+    GIT_REPOSITORY https://github.com/Kenix3/libultraship
+    GIT_TAG 823d98f3dd5f7f82fb70a31c9ac1fc01ea584f5f
 )
 FetchContent_MakeAvailable(libultraship)
 target_link_libraries(OTRizer PUBLIC libultraship OTRizer_compiler_flags)
