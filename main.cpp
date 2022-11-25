@@ -169,14 +169,14 @@ int main(int argc, char* argv[]) {
                     // Create the Sequence Resource.
                     ZeldaOTRizer::Sequence sequence(otrFile, afterPath.c_str());
                     std::vector<char> binaryData = ReadAllBytes(item);
-                    sequence.size = binaryData.size();
-                    sequence.rawBinary = std::vector<char>(binaryData.size());
-                    memcpy(sequence.rawBinary.data(), binaryData.data(), binaryData.size());
-                    sequence.cachePolicy = (type == "bgm" ? 2 : 1);
-                    sequence.medium = 2;
-                    sequence.sequenceNum = 0;
-                    sequence.numFonts = 1;
-                    sequence.fontIndices = { fontIdx };
+                    sequence.Size = binaryData.size();
+                    sequence.RawBinary = std::vector<char>(binaryData.size());
+                    memcpy(sequence.RawBinary.data(), binaryData.data(), binaryData.size());
+                    sequence.CachePolicy = (type == "bgm" ? 2 : 1);
+                    sequence.Medium = 2;
+                    sequence.SequenceNum = 0;
+                    sequence.NumFonts = 1;
+                    sequence.FontIndices = { fontIdx };
                     // Output the sequence resource to the OTR File.
                     sequence.OTRize();
                     printf("musicArchive->AddFile(%s)\n", afterPath.c_str());
