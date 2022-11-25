@@ -5,8 +5,9 @@
 std::vector<char> ReadAllBytes(const std::filesystem::path& filePath) {
     std::ifstream file(filePath, std::ios::in | std::ios::binary | std::ios::ate);
 
-    if (!file)
+    if (!file) {
         return std::vector<char>();
+    }
 
     int32_t fileSize = (int32_t)file.tellg();
     file.seekg(0);
@@ -19,26 +20,26 @@ std::vector<char> ReadAllBytes(const std::filesystem::path& filePath) {
 };
 
 void ReplaceOriginal(std::string& str, const std::string& from, const std::string& to) {
-    size_t start_pos = str.find(from);
+    size_t startPos = str.find(from);
 
-    while (start_pos != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos = str.find(from);
+    while (startPos != std::string::npos) {
+        str.replace(startPos, from.length(), to);
+        startPos = str.find(from);
     }
 }
 
 std::vector<std::string> Split(std::string s, const std::string& delimiter) {
-    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    size_t posStart = 0, posEnd, delimLen = delimiter.length();
     std::string token;
     std::vector<std::string> res;
 
-    while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
-        token = s.substr(pos_start, pos_end - pos_start);
-        pos_start = pos_end + delim_len;
+    while ((posEnd = s.find(delimiter, posStart)) != std::string::npos) {
+        token = s.substr(posStart, posEnd - posStart);
+        posStart = posEnd + delimLen;
         res.push_back(token);
     }
 
-    res.push_back(s.substr(pos_start));
+    res.push_back(s.substr(posStart));
     return res;
 }
 
@@ -130,7 +131,8 @@ int main(int argc, char* argv[]) {
                 // Proceed if the extension is .seq and a .meta file of the same name also exists.
                 if (extension == "seq") {
                     if (!std::filesystem::exists(afterPath + ".meta")) {
-                        std::cerr << item.path().generic_string() << " does not have a corresponding .meta file! Skipping.";
+                        std::cerr << item.path().generic_string()
+                                  << " does not have a corresponding .meta file! Skipping.";
                         continue;
                     }
                     std::string metaName;
