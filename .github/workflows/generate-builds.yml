@@ -52,7 +52,7 @@ jobs:
         name: SequenceOTRizer-mac
         path: build-cmake/SequenceOTRizer
   build-linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -60,7 +60,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt update
-          sudo apt install -y libsdl2-dev libsdl2-net-dev libpng-dev libglew-dev ninja-build
+          sudo apt install -y libsdl2-dev libpng-dev libglew-dev ninja-build
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
@@ -74,20 +74,14 @@ jobs:
           ./configure
           make -j 10
           sudo make install
-      - name: Install latest SDL_net
-        run: |
-          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-          wget https://www.libsdl.org/projects/SDL_net/release/SDL2_net-2.2.0.tar.gz
-          tar -xzf SDL2_net-2.2.0.tar.gz
-          cd SDL2_net-2.2.0
-          ./configure
-          make -j 10
-          sudo make install
       - name: Build SequenceOTRizer
         run: |
           export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
           cmake --no-warn-unused-cli -H. -Bbuild-cmake -GNinja -DCMAKE_BUILD_TYPE:STRING=Release
           cmake --build build-cmake --config Release -j3
+        env:
+          CC: gcc-10
+          CXX: g++-10
       - name: Upload build
         uses: actions/upload-artifact@v3
         with:
