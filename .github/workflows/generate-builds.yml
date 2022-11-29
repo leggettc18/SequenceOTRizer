@@ -38,9 +38,6 @@ jobs:
         brew uninstall --ignore-dependencies libpng
         sudo port install libsdl2 +universal libpng +universal glew +universal
         brew install ninja
-    - name: Install Dependencies
-      run: |
-        brew install ninja
     - name: Build SequenceOTRizer
       run: |
         export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
