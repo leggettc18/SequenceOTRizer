@@ -1,0 +1,82 @@
+name: generate-builds
+on:
+  push:
+  pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-macos:
+   runs-on: macos-12
+   steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-ccache
+    - name: Install Dependencies
+      run: |
+        brew install ninja
+    - name: Build SequenceOTRizer
+      run: |
+        export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+        cmake --no-warn-unused-cli -H. -Bbuild-cmake _GNinja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
+        cmake --build build-cmake --config Release --parallel 10
+    - name: Upload build
+      uses: actions/upload-artifact@v3
+      with:
+        name: SequenceOTRizer-mac
+        path: build-cmake/SequenceOTRizer
+  build-linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y ninja-build
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ runner.os }}-ccache
+      - name: Build SequenceOTRizer
+        run: |
+          export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
+          cmake --no-warn-unused-cli -H. -Bbuild-cmake -GNinja -DCMAKE_BUILD_TYPE:STRING=Release
+          cmake --build build-cmake --config Release -j3
+      - name: Upload build
+        uses: actions/upload-artifact@v3
+        with:
+          name: SequenceOTRizer-linux
+          path: |
+            build-cmake/SequenceOTRizer
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Install dependencies
+      run: |
+        choco install ninja
+        Remove-Item -Path "C:\ProgramData\Chocolatey\bin\ccache.exe" -Force
+    - name: ccache
+      uses: dcvz/ccache-action@27b9f33213c0079872f064f6b6ba0233dfa16ba2
+      with:
+        key: ${{ runner.os }}-ccache
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Build SequenceOTRizer
+      run: |
+        set $env:PATH="$env:USERPROFILE/.cargo/bin;$env:PATH"
+        cmake -S . -B build-cmake -G Ninja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_BUILD_TYPE:Release -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        cmake --build build-cmake --config Release --parallel 10
+    - name: Upload build
+      uses: actions/upload-artifact@v3
+      with:
+        name: SequenceOTRizer-windows
+        path: build-cmake/SequenceOTRizer.exe
+   
