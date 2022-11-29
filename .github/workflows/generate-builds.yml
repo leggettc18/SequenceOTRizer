@@ -103,7 +103,7 @@ jobs:
     - name: Build SequenceOTRizer
       run: |
         set $env:PATH="$env:USERPROFILE/.cargo/bin;$env:PATH"
-        cmake -S . -B build-cmake -G Ninja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DAUTO_USE_VCPKG=True -DCMAKE_VS_PLATFORM_NAME:STRING=x64
+        cmake -S . -B build-cmake -G Ninja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_AUTO_VCPKG=true -DCMAKE_VS_PLATFORM_NAME:STRING=x64
         cmake --build build-cmake --config Release --parallel 10
     - name: Upload build
       uses: actions/upload-artifact@v3
