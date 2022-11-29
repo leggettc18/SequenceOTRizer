@@ -48,6 +48,11 @@ jobs:
       with:
         name: SequenceOTRizer-mac
         path: build-cmake/SequenceOTRizer
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: build-cmake/SequenceOTRizer
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -85,6 +90,11 @@ jobs:
           name: SequenceOTRizer-linux
           path: |
             build-cmake/SequenceOTRizer
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build-cmake/SequenceOTRizer
   build-windows:
     runs-on: windows-latest
     steps:
@@ -110,4 +120,9 @@ jobs:
       with:
         name: SequenceOTRizer-windows
         path: build-cmake/SequenceOTRizer.exe
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: build-cmake/SequenceOTRizer.exe
    
