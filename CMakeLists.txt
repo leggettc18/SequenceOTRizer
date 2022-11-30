@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16.0)
 project(SequenceOTRizer VERSION 0.1)
+configure_file(config.h.in config.h)
 add_library(SequenceOTRizer_compiler_flags INTERFACE)
 target_compile_features(SequenceOTRizer_compiler_flags INTERFACE cxx_std_20)
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
@@ -10,6 +11,7 @@ target_compile_options(SequenceOTRizer_compiler_flags INTERFACE
     "$<${msvc_like_cxx}:$<BUILD_INTERFACE:-W3>>"
 )
 add_executable(SequenceOTRizer main.cpp)
+target_include_directories(SequenceOTRizer PUBLIC "${PROJECT_BINARY_DIR}")
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     get_property(MSVC_RUNTIM_LIBRARY_DEFAULT TARGET SequenceOTRizer PROPERTY MSVC_RUNTIME_LIBRARY)
     if ("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")

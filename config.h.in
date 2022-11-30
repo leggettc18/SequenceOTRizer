@@ -1,0 +1,2 @@
+#define SequenceOTRizer_VERSION_MAJOR @SequenceOTRizer_VERSION_MAJOR@
+#define SequenceOTRizer_VERSION_MINOR @SequenceOTRizer_VERSION_MINOR@

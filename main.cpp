@@ -1,8 +1,14 @@
 #include "Sequence.h"
 #include "Utils.h"
+#include "config.h"
 #include <iostream>
 
+void PrintVersion() {
+    printf("v%d.%d\n", SequenceOTRizer_VERSION_MAJOR, SequenceOTRizer_VERSION_MINOR);
+}
+
 void PrintUsage(std::string fileName) {
+    PrintVersion();
     printf("Usage: %s --seq-path <seq-path> --game-path <game-path>\n\n"
            "<seq-path> - path to custom sequences folder\n"
            "<game-path> - path to the game's executable folder\n",
@@ -14,8 +20,22 @@ int main(int argc, char* argv[]) {
     std::filesystem::path gamePath;
 
     // Parse arguments.
-    if (argc < 5) {
+    if (argc == 1) {
         PrintUsage(argv[0]);
+        return 0;
+    }
+
+    // Print version.
+    if (argc == 2) {
+        if (strcmp(argv[1], "--version") == 0 || strcmp(argv[1], "-v") == 0) {
+            PrintVersion();
+        } else {
+            PrintUsage(argv[0]);
+            if (strcmp(argv[1], "--help") != 0 && strcmp(argv[1], "-h") != 0) {
+                return 1;
+            }
+        }
+        return 0;
     }
 
     if (argc == 5) {
