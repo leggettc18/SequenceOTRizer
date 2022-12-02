@@ -111,8 +111,8 @@ int main(int argc, char* argv[]) {
                 if (extension == "seq") {
                     if (!std::filesystem::exists(afterPath + ".meta")) {
                         std::cerr << item.path().generic_string()
-                                  << " does not have a corresponding .meta file! Skipping.";
-                        return 1;
+                                  << " does not have a corresponding .meta file! Skipping." << std::endl;
+                        continue;
                     }
                     ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
                     // Output the sequence resource to the OTR File.
