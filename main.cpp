@@ -9,15 +9,18 @@ void PrintVersion() {
 
 void PrintUsage(std::string fileName) {
     PrintVersion();
-    printf("Usage: %s --seq-path <seq-path> --game-path <game-path>\n\n"
+    printf("Usage: %s --seq-path <seq-path> [--game-path <game-path> --otr-name <otr-name>]\n\n"
            "<seq-path> - path to custom sequences folder\n"
-           "<game-path> - path to the game's executable folder\n",
+           "<game-path> - (optional) path to the game's executable folder. Defaults to the current directory.\n"
+           "<otr-name> - (optional) the filename of the output OTR file *without* the .otr extension. Defaults to \"custom-music\".\n",
            fileName.c_str());
 }
 
 int main(int argc, char* argv[]) {
     std::filesystem::path customMusicPath;
-    std::filesystem::path gamePath;
+    std::filesystem::path gamePath = ".";
+    std::string otrName = "custom-music";
+    bool seqPathSet = false;
 
     // Parse arguments.
     if (argc == 1) {
@@ -38,24 +41,33 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    if (argc == 5) {
+    if (argc > 2) {
         int i = 1; // skip the first argument which is the filename.
         while (i < argc) {
-            if (strcmp(argv[i], "--seq-path") == 0) {
+            if (strcmp(argv[i], "--seq-path") == 0 && argc > i + 1) {
                 i += 1; // next argument (should be the actual path).
                 customMusicPath = argv[i];
+                seqPathSet = true;
                 i += 1;   // check next argument on next iteration.
                 continue; // go to next loop iteration.
             }
 
-            if (strcmp(argv[i], "--game-path") == 0) {
+            if (strcmp(argv[i], "--game-path") == 0 && argc > i + 1) {
                 i += 1;
                 gamePath = argv[i];
                 i += 1;
                 continue;
             }
 
-            std::cout << "Invalid Arguments" << std::endl;
+            if (strcmp(argv[i], "--otr-name") == 0 && argc > i + 1) {
+                i += 1;
+                otrName = argv[i];
+                i += 1;
+                continue;
+            }
+        }
+        if (!seqPathSet) {
+            std::cout << "Missing --seqPath" << std::endl;
             PrintUsage(argv[0]);
             return 1;
         }
@@ -71,8 +83,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Ask to delete custom-music.otr if it already exists.
-    std::filesystem::path outputPath = gamePath / "mods" / "custom-music.otr";
+    // Ask to delete custom music otr if it already exists.
+    std::filesystem::path outputPath = gamePath / "mods" / otrName += ".otr";
     if (std::filesystem::exists(outputPath)) {
         std::cout << outputPath.generic_string() << " already exists. Would you like to overwrite it? (y/n): ";
         for (std::string answer; std::getline(std::cin, answer);) {
