@@ -18,7 +18,7 @@ SequenceOTRizer --seq-path <seq folder> --game-path "$HOME/Library/Application S
 ```
 ### Advanced
 #### Parameters
-Parameter | Required? | Description
+Parameter &nbsp; &nbsp; &nbsp; &nbsp; | Required? | Description
 ---|---|---
 `--seq-path` | yes | The path to a parent folder for your custom sequences and corresponding .meta files. It will be searched recursively.
 `--game-path` | no | The path to your Ship of Harkinian executable file. A `mods` folder will be created here with the output OTR inside of it. It defaults to the current working directory.
