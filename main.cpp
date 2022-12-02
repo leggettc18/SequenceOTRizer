@@ -99,26 +99,17 @@ int main(int argc, char* argv[]) {
         }
         // Iterate over all files in the custom sequences path.
         for (auto item : list) {
-            std::vector<std::string> splitPath = StringUtils::Split(item.path().generic_string(), ".");
-            // Check if file has an extension and extract it.
-            if (splitPath.size() >= 2) {
-                std::string extension = splitPath.at(splitPath.size() - 1);
-                splitPath.pop_back();
-                std::string afterPath = std::accumulate(
-                    splitPath.begin(), splitPath.end(), std::string(),
-                    [](std::string lhs, const std::string& rhs) { return lhs.empty() ? rhs : lhs + '.' + rhs; });
-                // Proceed if the extension is .seq and a .meta file of the same name also exists.
-                if (extension == "seq") {
-                    if (!std::filesystem::exists(afterPath + ".meta")) {
-                        std::cerr << item.path().generic_string()
-                                  << " does not have a corresponding .meta file! Skipping." << std::endl;
-                        continue;
-                    }
-                    ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
-                    // Output the sequence resource to the OTR File.
-                    sequence.OTRize();
-                    printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
+            // Proceed if the extension is .seq and a .meta file of the same name also exists.
+            if (item.path().extension() == ".seq") {
+                if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
+                    std::cerr << item.path().generic_string()
+                                << " does not have a corresponding .meta file! Skipping." << std::endl;
+                    continue;
                 }
+                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
+                // Output the sequence resource to the OTR File.
+                sequence.OTRize();
+                printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
             }
         }
     } else {
