@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(libultraship)
 FetchContent_Declare(
     OTRizer
     GIT_REPOSITORY https://github.com/leggettc18/OTRizer
-    GIT_TAG bf6b79f8e5976b7fe61e17147b9c8077d1f7a691
+    GIT_TAG c1d1ee3d88d8d688d960d7da457641c6ec6e3067
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(OTRizer)
