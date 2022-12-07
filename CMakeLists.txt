@@ -10,21 +10,21 @@ include(FetchContent)
 FetchContent_Declare(
     libultraship
     GIT_REPOSITORY https://github.com/leggettc18/libultraship
-    GIT_TAG 74c9912cde751489799c921f2b849a5640ed84f3
+    GIT_TAG 1890bc39d3657a1173b2de05bad6987a5f8ac527
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(libultraship)
 FetchContent_Declare(
     OTRizer
     GIT_REPOSITORY https://github.com/leggettc18/OTRizer
-    GIT_TAG c1d1ee3d88d8d688d960d7da457641c6ec6e3067
+    GIT_TAG bf6b79f8e5976b7fe61e17147b9c8077d1f7a691
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(OTRizer)
 FetchContent_Declare(
     ZeldaOTRizer
     GIT_REPOSITORY https://github.com/leggettc18/ZeldaOTRizer
-    GIT_TAG fc7fe0b5029b12585260666a9e1d163183f74d0f
+    GIT_TAG bf6b79f8e5976b7fe61e17147b9c8077d1f7a691
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(ZeldaOTRizer)
