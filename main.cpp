@@ -1,5 +1,4 @@
-#include "Sequence.h"
-#include "Utils.h"
+#include "ZeldaOTRizer/Sequence.h"
 #include "config.h"
 #include <iostream>
 
@@ -121,7 +120,7 @@ int main(int argc, char* argv[]) {
                 ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
                 // Output the sequence resource to the OTR File.
                 sequence.OTRize();
-                printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
+                printf("musicArchive->AddFile(%s)\n", sequence.OutPath.c_str());
             }
         }
     } else {
