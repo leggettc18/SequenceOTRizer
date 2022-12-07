@@ -10,21 +10,21 @@ include(FetchContent)
 FetchContent_Declare(
     libultraship
     GIT_REPOSITORY https://github.com/leggettc18/libultraship
-    GIT_TAG eed9e39e4fa546dc88e50456f5ad77cbefb3a227
+    GIT_TAG 271c554f31cfb65a55e889bdeebf9a4577ab588c
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(libultraship)
 FetchContent_Declare(
     OTRizer
     GIT_REPOSITORY https://github.com/leggettc18/OTRizer
-    GIT_TAG f3a255ba8c3912416d02bbacf349c07e2cf5cf81
+    GIT_TAG 64e26f44974d58ac5d2c9244abf8e02c71dd0792
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(OTRizer)
 FetchContent_Declare(
     ZeldaOTRizer
     GIT_REPOSITORY https://github.com/leggettc18/ZeldaOTRizer
-    GIT_TAG 860e49dd7c69502eb7cbbea868b0f42b7728811c
+    GIT_TAG 720c544b2cac02d2e04c9393c9498ff113dbc1b3
     OVERRIDE_FIND_PACKAGE
 )
 FetchContent_MakeAvailable(ZeldaOTRizer)
@@ -41,7 +41,10 @@ add_executable(SequenceOTRizer main.cpp)
 target_include_directories(SequenceOTRizer PUBLIC "${PROJECT_BINARY_DIR}")
 find_package(ZeldaOTRizer)
 target_link_libraries(SequenceOTRizer ZeldaOTRizer::ZeldaOTRizer SequenceOTRizer_compiler_flags)
-install(TARGETS SequenceOTRizer RUNTIME DESTINATION .)
+install(TARGETS SequenceOTRizer RUNTIME DESTINATION . COMPONENT Runtime)
 set(CPACK_GENERATOR "ZIP" CACHE STRING "Generators to support. semi-colon delimited list")
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+set(CPACK_COMPONENTS_GROUPING IGNORE)
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+set(CPACK_COMPONENT_ALL Runtime)
 include(CPack)
