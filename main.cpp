@@ -1,5 +1,4 @@
 #include "Sequence.h"
-#include <format>
 #include "zip_file.hpp"
 #include "Utils.h"
 #include "config.h"
@@ -118,6 +117,7 @@ int main(int argc, char* argv[]) {
                 // If item is .ootrs, extract it before proceeding with OTRizing
                 miniz_cpp::zip_file file(item.path());
                 file.extractall(item.path().parent_path());
+
                 if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".seq") ||
                     !std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
                     std::cerr << item.path().generic_string() << " does not contain .seq or .meta."
