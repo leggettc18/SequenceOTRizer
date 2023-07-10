@@ -1,4 +1,6 @@
 #include "Sequence.h"
+#include <format>
+#include "zip_file.hpp"
 #include "Utils.h"
 #include "config.h"
 #include <iostream>
@@ -111,32 +113,31 @@ int main(int argc, char* argv[]) {
         }
         // Iterate over all files in the custom sequences path.
         for (auto item : list) {
-            // If item is .ootrs, extract it before proceeding with OTRizing
+            std::filesystem::path path;
             if (item.path().extension() == ".ootrs") {
-                system(std::format("unzip {} -d {}", item.path(), item.path().parent_path()));
+                // If item is .ootrs, extract it before proceeding with OTRizing
+                miniz_cpp::zip_file file(item.path());
+                file.extractall(item.path().parent_path());
                 if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".seq") ||
                     !std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
                     std::cerr << item.path().generic_string() << " does not contain .seq or .meta."
-                              << std::endl;
+                                << std::endl;
                     continue;
                 }
-                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path().parent_path() / item.path().stem() += ".seq");
-                // Output the sequence resource to the OTR File.
-                sequence.OTRize();
-                printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
-            }
-            // Proceed if the extension is .seq and a .meta file of the same name also exists.
-            if (item.path().extension() == ".seq") {
+                path = item.path().parent_path() / item.path().stem() += ".seq";
+            } else if (item.path().extension() == ".seq") {
+                // Proceed if the extension is .seq and a .meta file of the same name also exists.
                 if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
                     std::cerr << item.path().generic_string()
                                 << " does not have a corresponding .meta file! Skipping." << std::endl;
                     continue;
                 }
-                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
-                // Output the sequence resource to the OTR File.
-                sequence.OTRize();
-                printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
+                path = item.path();
             }
+            ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, path);
+            // Output the sequence resource to the OTR File.
+            sequence.OTRize();
+            printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
         }
     } else {
         std::cout << customMusicPath.generic_string() << " cannot be found." << std::endl;
