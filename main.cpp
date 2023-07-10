@@ -111,6 +111,20 @@ int main(int argc, char* argv[]) {
         }
         // Iterate over all files in the custom sequences path.
         for (auto item : list) {
+            // If item is .ootrs, extract it before proceeding with OTRizing
+            if (item.path().extension() == ".ootrs") {
+                system(std::format("unzip {} -d {}", item.path(), item.path().parent_path()));
+                if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".seq") ||
+                    !std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
+                    std::cerr << item.path().generic_string() << " does not contain .seq or .meta."
+                              << std::endl;
+                    continue;
+                }
+                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path().parent_path() / item.path().stem() += ".seq");
+                // Output the sequence resource to the OTR File.
+                sequence.OTRize();
+                printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
+            }
             // Proceed if the extension is .seq and a .meta file of the same name also exists.
             if (item.path().extension() == ".seq") {
                 if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
