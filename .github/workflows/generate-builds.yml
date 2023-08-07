@@ -120,6 +120,8 @@ jobs:
         key: ${{ runner.os }}-ccache
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Build SequenceOTRizer
+      env:
+        VCPKG_ROOT: D:/a/vcpkg
       run: |
         set $env:PATH="$env:USERPROFILE/.cargo/bin;$env:PATH"
         cmake -S . -B build-cmake -G Ninja -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_AUTO_VCPKG=true -DCMAKE_VS_PLATFORM_NAME:STRING=x64 -DSTORM_SKIP_INSTALL=true
