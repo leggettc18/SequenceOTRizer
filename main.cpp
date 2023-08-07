@@ -111,11 +111,16 @@ int main(int argc, char* argv[]) {
         }
         // Iterate over all files in the custom sequences path.
         for (auto item : list) {
-            // Proceed if the extension is .seq and a .meta file of the same name also exists.
             if (item.path().extension() == ".seq") {
+                // Proceed if the extension is .seq and a .meta file of the same name also exists.
                 if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
                     std::cerr << item.path().generic_string()
                                 << " does not have a corresponding .meta file! Skipping." << std::endl;
+                    continue;
+                }
+                if (std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".zbank")) {
+                    std::cerr << item.path().generic_string()
+                                << " is an unsupported soundbank mod! Skipping." << std::endl;
                     continue;
                 }
                 ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
