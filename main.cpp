@@ -110,20 +110,28 @@ int main(int argc, char* argv[]) {
             return 1;
         }
         // Iterate over all files in the custom sequences path.
+        std::vector<std::filesystem::path> folders;
         for (auto item : list) {
-            if (item.path().extension() == ".seq") {
-                // Proceed if the extension is .seq and a .meta file of the same name also exists.
-                if (!std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".meta")) {
-                    std::cerr << item.path().generic_string()
-                                << " does not have a corresponding .meta file! Skipping." << std::endl;
-                    continue;
+            if (std::filesystem::is_directory(item.path())) {
+                folders.push_back(item.path());
+            }
+        }
+        for (auto folder : folders) {
+            std::filesystem::path seqPath;
+            bool valid = false;
+            for (auto file : std::filesystem::directory_iterator(folder)) {
+                if (file.path().extension() == ".zbank") {
+                    std::cerr << file.path().generic_string() << " is an unsupported soundbank mod! Skipping." << std::endl;
+                    valid = false;
+                    break;
                 }
-                if (std::filesystem::exists(item.path().parent_path() / item.path().stem() += ".zbank")) {
-                    std::cerr << item.path().generic_string()
-                                << " is an unsupported soundbank mod! Skipping." << std::endl;
-                    continue;
+                if (file.path().extension() == ".seq" && std::filesystem::exists(file.path().parent_path() / file.path().stem() += ".meta")) {
+                    seqPath = file.path();
+                    valid = true;
                 }
-                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, item.path());
+            }
+            if (valid) {
+                ZeldaOTRizer::Sequence sequence = ZeldaOTRizer::Sequence::FromSeqFile(otrFile, seqPath);
                 // Output the sequence resource to the OTR File.
                 sequence.OTRize();
                 printf("musicArchive->AddFile(%s)\n", sequence.outPath.c_str());
